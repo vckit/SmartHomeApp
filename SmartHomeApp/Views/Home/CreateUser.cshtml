@@ -1,0 +1,29 @@
+﻿@model SmartHomeApp.Models.User
+
+@{
+    ViewData["Title"] = "Добавление нового пользователя";
+}
+
+<h1>Добавление нового пользователя</h1>
+
+<form asp-action="CreateUser">
+    <div class="form-group">
+        <label asp-for="Username" class="control-label">Имя пользователя</label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">Электронная почта</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">Пароль</label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group mx-auto my-4">
+        <input type="submit" value="Добавить пользователя" class="btn btn-primary" />
+    </div>
+
+</form>

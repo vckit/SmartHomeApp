@@ -222,6 +222,23 @@ namespace SmartHomeApp.Controllers
             return PartialView("_DeviceList", deviceList);
         }
 
+        public IActionResult CreateUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index)); 
+            }
+            return View(user);
+        }
 
     }
 }
