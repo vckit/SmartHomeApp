@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SmartHomeApp.Models.Device>
+
+<h1>Устройства</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Модель</th>
+            <th>Местоположение</th>
+            <th>Дата установки</th>
+            <th>Статус</th>
+            <th>Дата последнего обслуживания</th>
+            <th>Цена подписки</th>
+            <th>Период подписки</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.DeviceId)</td>
+                <td>@(item.Model != null ? Html.DisplayFor(modelItem => item.Model.ModelName) : "Не указано")</td>
+                <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                <td>@Html.DisplayFor(modelItem => item.InstallationDate)</td>
+                <td>@(item.Status != null ? Html.DisplayFor(modelItem => item.Status.StatusName) : "Не указано")</td>
+                <td>@Html.DisplayFor(modelItem => item.LastMaintenance)</td>
+                <td>@Html.DisplayFor(modelItem => item.SubscriptionPrice)</td>
+                <td>@Html.DisplayFor(modelItem => item.SubscriptionPeriod)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DeviceId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DeviceId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DeviceId">Delete</a>
+                </td>
+            </tr>
+        }
+        <a asp-action="Create">Добавить новое устройство</a>
+    </tbody>
+</table>

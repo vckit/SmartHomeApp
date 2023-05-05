@@ -1,0 +1,49 @@
+﻿@model SmartHomeApp.Models.Device
+@using SmartHomeApp.Models
+@{
+    ViewData["Title"] = "Create Device";
+}
+
+<h2>Форма добавления нового устройства</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="ModelId">Модель</label>
+        <select asp-for="ModelId" class="form-control" asp-items="ViewBag.ModelList">
+            <option value="">-- Выберите Модель --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location">Укажите местоположение</label>
+        <input type="text" asp-for="Location" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="InstallationDate">Дата устрановления</label>
+        <input type="date" asp-for="InstallationDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="StatusId">Статус устройства</label>
+        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusList">
+            <option value="">-- Выберите статус --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastMaintenance">Последнее обслуживание</label>
+        <input type="date" asp-for="LastMaintenance" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SubscriptionPrice">Цена подписки</label>
+        <input type="text" asp-for="SubscriptionPrice" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SubscriptionPeriod">Период подписки</label>
+        <input type="text" asp-for="SubscriptionPeriod" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="display: block; margin: 10px auto;">Сохранить</button>
+
+
+</form>
+
+<div>
+    <a asp-action="Index">Вернуться назад</a>
+</div>
