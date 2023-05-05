@@ -180,6 +180,21 @@ namespace SmartHomeApp.Controllers
             ViewBag.ErrorMessage = message;
             return View();
         }
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var devices = _context.Devices
+                .Include(d => d.Model)
+                .Include(d => d.Status)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                devices = devices.Where(d => d.DeviceName.Contains(searchString) || d.Location.Contains(searchString));
+            }
+
+            var deviceList = await devices.ToListAsync();
+            return PartialView("_DeviceList", deviceList);
+        }
 
 
     }

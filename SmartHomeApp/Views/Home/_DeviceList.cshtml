@@ -1,0 +1,21 @@
+﻿@model IEnumerable<SmartHomeApp.Models.Device>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.DeviceId)</td>
+        <td>@Html.DisplayFor(modelItem => item.DeviceName)</td>
+        <td>@(item.Model != null ? Html.DisplayFor(modelItem => item.Model.ModelName) : "Не указано")</td>
+        <td>@Html.DisplayFor(modelItem => item.Location)</td>
+        <td>@Html.DisplayFor(modelItem => item.InstallationDate)</td>
+        <td>@(item.Status != null ? Html.DisplayFor(modelItem => item.Status.StatusName) : "Не указано")</td>
+        <td>@Html.DisplayFor(modelItem => item.LastMaintenance)</td>
+        <td>@Html.DisplayFor(modelItem => item.SubscriptionPrice)</td>
+        <td>@Html.DisplayFor(modelItem => item.SubscriptionPeriod)</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.DeviceId">Изменить</a> |
+            <a asp-action="Details" asp-route-id="@item.DeviceId">Детали</a> |
+            <a asp-action="Delete" asp-route-id="@item.DeviceId" onclick="return confirm('Вы уверены, что хотите удалить это устройство?');">Удалить</a>
+        </td>
+    </tr>
+}
