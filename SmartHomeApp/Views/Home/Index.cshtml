@@ -52,7 +52,11 @@
         <div class="form-group col-md-3">
             <input asp-for="Item2.SearchString" class="form-control" placeholder="Поиск по названию и локации" id="searchString">
         </div>
+        <div class="col-md-9">
+            <a asp-action="Create" class="btn btn-primary float-end">Добавить новое устройство</a>
+        </div>
     </div>
+
 </form>
 
 
@@ -92,6 +96,6 @@
                 </td>
             </tr>
         }
-        <a asp-action="Create">Добавить новое устройство</a>
     </tbody>
+    
 </table>
