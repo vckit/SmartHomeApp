@@ -180,16 +180,42 @@ namespace SmartHomeApp.Controllers
             ViewBag.ErrorMessage = message;
             return View();
         }
-        public async Task<IActionResult> Search(string searchString)
+        public async Task<IActionResult> SearchByStatus(DeviceFilterViewModel filterViewModel)
         {
             var devices = _context.Devices
                 .Include(d => d.Model)
                 .Include(d => d.Status)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(filterViewModel.SearchString))
             {
-                devices = devices.Where(d => d.DeviceName.Contains(searchString) || d.Location.Contains(searchString));
+                devices = devices.Where(d => d.DeviceName.Contains(filterViewModel.SearchString) || d.Location.Contains(filterViewModel.SearchString));
+            }
+
+            if (filterViewModel.StatusId != null)
+            {
+                devices = devices.Where(d => d.StatusId == filterViewModel.StatusId);
+            }
+
+            var deviceList = await devices.ToListAsync();
+            return PartialView("_DeviceList", deviceList);
+        }
+
+        public async Task<IActionResult> SearchByInstallationDate(DeviceFilterViewModel filterViewModel)
+        {
+            var devices = _context.Devices
+                .Include(d => d.Model)
+                .Include(d => d.Status)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(filterViewModel.SearchString))
+            {
+                devices = devices.Where(d => d.DeviceName.Contains(filterViewModel.SearchString) || d.Location.Contains(filterViewModel.SearchString));
+            }
+
+            if (filterViewModel.InstallationDate != null)
+            {
+                devices = devices.Where(d => d.InstallationDate.Value.Date == filterViewModel.InstallationDate.Value.Date);
             }
 
             var deviceList = await devices.ToListAsync();
