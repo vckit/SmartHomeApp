@@ -1,0 +1,58 @@
+﻿@model SmartHomeApp.Models.Device
+
+<h2>Детали устройства</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">ID</dt>
+        <dd class="col-sm-10">@Model.DeviceId</dd>
+
+        <dt class="col-sm-2">Название</dt>
+        <dd class="col-sm-10">@Model.DeviceName</dd>
+
+        <dt class="col-sm-2">Модель</dt>
+        <dd class="col-sm-10">@Model.Model?.ModelName</dd>
+
+        <dt class="col-sm-2">Местоположение</dt>
+        <dd class="col-sm-10">@Model.Location</dd>
+
+        <dt class="col-sm-2">Дата последнего обслуживания</dt>
+        <dd class="col-sm-10">@Model.LastMaintenance</dd>
+
+        <dt class="col-sm-2">Период</dt>
+        <dd class="col-sm-10">@Model.SubscriptionPeriod</dd>
+
+        <dt class="col-sm-2">Цена</dt>
+        <dd class="col-sm-10">@Model.SubscriptionPrice</dd>
+
+        <dt class="col-sm-2">Дата установки</dt>
+        <dd class="col-sm-10">@Model.InstallationDate</dd>
+
+        <dt class="col-sm-2">События безопасности</dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var securityEvent in Model.SecurityEvents.Where(se => se.DeviceId == Model.DeviceId))
+                {
+                    <li>@securityEvent.EventDate</li>
+                    <li> @securityEvent.EventType?.EventTypeName</li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">Пользователи имеющие доступ</dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var permission in Model.UserDevicePermissions)
+                {
+                    <li>@permission.User?.Email</li>
+                    <li>@permission.User?.Username</li>
+                    <li>@permission.User?.RegistrationDate</li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DeviceId">Изменить</a> |
+    <a asp-action="Index">Вернуться назад</a>
+</div>

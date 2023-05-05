@@ -1,0 +1,54 @@
+﻿@model SmartHomeApp.Models.Device
+
+@{
+    ViewData["Title"] = "Редактировать устройство";
+}
+
+<h1>Редактировать устройство</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="DeviceId" />
+    <div class="form-group">
+        <label asp-for="DeviceName" class="control-label">Название</label>
+        <input asp-for="DeviceName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ModelId" class="control-label">Модель</label>
+        <select asp-for="ModelId" asp-items="ViewBag.ModelList" class="form-control">
+            <option value="">Выберите модель</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location" class="control-label">Местоположение</label>
+        <input asp-for="Location" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="InstallationDate" class="control-label">Дата установки</label>
+        <input asp-for="InstallationDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="StatusId" class="control-label">Статус</label>
+        <select asp-for="StatusId" asp-items="ViewBag.StatusList" class="form-control">
+            <option value="">Выберите статус</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastMaintenance" class="control-label">Дата последнего обслуживания</label>
+        <input asp-for="LastMaintenance" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SubscriptionPrice" class="control-label">Цена подписки</label>
+        <input asp-for="SubscriptionPrice" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SubscriptionPeriod" class="control-label">Период подписки</label>
+        <input asp-for="SubscriptionPeriod" class="form-control" />
+    </div>
+    <div class="form-group text-center mt-4 mb-4">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Вернуться к списку устройств</a>
+</div>

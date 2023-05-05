@@ -9,6 +9,8 @@ public partial class Device
 
     public int? ModelId { get; set; }
 
+    public string? DeviceName { get; set; }
+
     public string? Location { get; set; }
 
     public DateTime? InstallationDate { get; set; }
@@ -32,5 +34,4 @@ public partial class Device
     public virtual DeviceStatus? Status { get; set; }
 
     public virtual ICollection<UserDevicePermission> UserDevicePermissions { get; set; } = new List<UserDevicePermission>();
-    
 }

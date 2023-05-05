@@ -8,6 +8,10 @@
 
 <form asp-action="Create">
     <div class="form-group">
+        <label asp-for="Location">Название устройства</label>
+        <input type="text" asp-for="DeviceName" class="form-control" />
+    </div>
+    <div class="form-group">
         <label asp-for="ModelId">Модель</label>
         <select asp-for="ModelId" class="form-control" asp-items="ViewBag.ModelList">
             <option value="">-- Выберите Модель --</option>
@@ -39,7 +43,7 @@
         <label asp-for="SubscriptionPeriod">Период подписки</label>
         <input type="text" asp-for="SubscriptionPeriod" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary" style="display: block; margin: 10px auto;">Сохранить</button>
+    <button asp-action="Create" type="submit" class="btn btn-primary" style="display: block; margin: 10px auto;">Сохранить</button>
 
 
 </form>
