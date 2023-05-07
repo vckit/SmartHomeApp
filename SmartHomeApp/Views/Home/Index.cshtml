@@ -1,6 +1,5 @@
 ﻿@model (IEnumerable<SmartHomeApp.Models.Device>, SmartHomeApp.Models.DeviceFilterViewModel)
 
-
 <head>
     ...
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -27,13 +26,13 @@
 
             function doneTyping() {
                 var searchString = $input.val();
-                var status = $status.val();
+                var statusId = $status.val();
                 var installationDate = $installationDate.val();
 
                 $.ajax({
                     url: '@Url.Action("Search")',
                     type: 'POST',
-                    data: { searchString: searchString, status: status, installationDate: installationDate },
+                    data: { searchString: searchString, statusId: statusId, installationDate: installationDate },
                     success: function (result) {
                         $('#_DeviceList').html(result);
                     }
@@ -47,13 +46,12 @@
                 $.ajax({
                     url: '@Url.Action("SearchByStatus")',
                     type: 'POST',
-                    data: { searchString: searchString, statusId: statusId }, // измените status на statusId
+                    data: { searchString: searchString, statusId: statusId },
                     success: function (result) {
                         $('#_DeviceList').html(result);
                     }
                 });
             }
-
 
             function filterByInstallationDate() {
                 var searchString = $input.val();
@@ -68,6 +66,7 @@
                     }
                 });
             }
+
         });
     </script>
 
@@ -89,6 +88,7 @@
             <select asp-for="Item2.StatusId" asp-items="ViewBag.StatusList" class="form-control" id="status">
                 <option value="">Выберите статус</option>
             </select>
+
         </div>
         <div class="form-group col-md-3">
             <input asp-for="Item2.InstallationDate" type="date" class="form-control" id="installationDate">

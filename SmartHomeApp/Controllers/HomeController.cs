@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SmartHomeApp.Models;
+
 using System.Diagnostics;
 
 namespace SmartHomeApp.Controllers
@@ -16,44 +17,42 @@ namespace SmartHomeApp.Controllers
         }
         public async Task<IActionResult> Index(DeviceFilterViewModel filterViewModel)
         {
-            var devices = _context.Devices
-                .Include(d => d.Model)
-                .Include(d => d.Status)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(filterViewModel.SearchString))
-            {
-                devices = devices.Where(d => d.DeviceName.Contains(filterViewModel.SearchString) || d.Location.Contains(filterViewModel.SearchString));
-            }
-
-            if (filterViewModel.StatusId != null)
-            {
-                devices = devices.Where(d => d.StatusId == filterViewModel.StatusId);
-            }
-
-            if (filterViewModel.InstallationDate != null)
-            {
-                devices = devices.Where(d => d.InstallationDate.Value.Date == filterViewModel.InstallationDate.Value.Date);
-            }
-
-            ViewBag.StatusList = new SelectList(_context.DeviceStatuses, "StatusId", "StatusName");
-
+            var devices = FilterDevices(filterViewModel);
+            ViewBag.StatusList = GetStatusSelectList();
             var deviceList = await devices.ToListAsync();
             var viewModel = (devices: (IEnumerable<Device>)deviceList, filter: filterViewModel);
             return View(viewModel);
         }
 
-
-
-        public IActionResult Privacy()
+        public IActionResult Create()
         {
+            ViewBag.StatusList = GetStatusSelectList();
+            ViewBag.ModelList = GetModelSelectList();
             return View();
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Edit(int? id)
         {
-            ViewBag.StatusList = new SelectList(_context.DeviceStatuses, "StatusId", "StatusName");
-            ViewBag.ModelList = new SelectList(_context.DeviceModels, "ModelId", "ModelName");
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var device = await _context.Devices.FindAsync(id);
+            if (device == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.StatusList = GetStatusSelectList();
+            ViewBag.ModelList = GetModelSelectList();
+            return View(device);
+        }
+
+      
+
+        public IActionResult Privacy()
+        {
             return View();
         }
 
@@ -92,23 +91,7 @@ namespace SmartHomeApp.Controllers
             return View(device);
         }
 
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var device = await _context.Devices.FindAsync(id);
-            if (device == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.StatusList = new SelectList(_context.DeviceStatuses, "StatusId", "StatusName");
-            ViewBag.ModelList = new SelectList(_context.DeviceModels, "ModelId", "ModelName");
-            return View(device);
-        }
+      
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -180,47 +163,31 @@ namespace SmartHomeApp.Controllers
             ViewBag.ErrorMessage = message;
             return View();
         }
+       
+
         public async Task<IActionResult> SearchByStatus(DeviceFilterViewModel filterViewModel)
         {
-            var devices = _context.Devices
-                .Include(d => d.Model)
-                .Include(d => d.Status)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(filterViewModel.SearchString))
-            {
-                devices = devices.Where(d => d.DeviceName.Contains(filterViewModel.SearchString) || d.Location.Contains(filterViewModel.SearchString));
-            }
-
-            if (filterViewModel.StatusId != null)
-            {
-                devices = devices.Where(d => d.StatusId == filterViewModel.StatusId);
-            }
-
+            var devices = FilterDevices(filterViewModel);
             var deviceList = await devices.ToListAsync();
             return PartialView("_DeviceList", deviceList);
         }
 
         public async Task<IActionResult> SearchByInstallationDate(DeviceFilterViewModel filterViewModel)
         {
-            var devices = _context.Devices
-                .Include(d => d.Model)
-                .Include(d => d.Status)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(filterViewModel.SearchString))
-            {
-                devices = devices.Where(d => d.DeviceName.Contains(filterViewModel.SearchString) || d.Location.Contains(filterViewModel.SearchString));
-            }
-
-            if (filterViewModel.InstallationDate != null)
-            {
-                devices = devices.Where(d => d.InstallationDate.Value.Date == filterViewModel.InstallationDate.Value.Date);
-            }
-
+            var devices = FilterDevices(filterViewModel);
             var deviceList = await devices.ToListAsync();
             return PartialView("_DeviceList", deviceList);
         }
+        private SelectList GetStatusSelectList()
+        {
+            return new SelectList(_context.DeviceStatuses, "StatusId", "StatusName");
+        }
+
+        private SelectList GetModelSelectList()
+        {
+            return new SelectList(_context.DeviceModels, "ModelId", "ModelName");
+        }
+
 
         public IActionResult CreateUser()
         {
@@ -238,6 +205,38 @@ namespace SmartHomeApp.Controllers
                 return RedirectToAction(nameof(Index)); 
             }
             return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Search(DeviceFilterViewModel filterViewModel)
+        {
+            var devices = FilterDevices(filterViewModel);
+            var deviceList = await devices.ToListAsync();
+            return PartialView("_DeviceList", deviceList);
+        }
+
+        private IQueryable<Device> FilterDevices(DeviceFilterViewModel filterViewModel)
+        {
+            var devices = _context.Devices
+                .Include(d => d.Model)
+                .Include(d => d.Status)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(filterViewModel.SearchString))
+            {
+                devices = devices.Where(d => d.DeviceName.Contains(filterViewModel.SearchString) || d.Location.Contains(filterViewModel.SearchString));
+            }
+
+            if (filterViewModel.StatusId != null)
+            {
+                devices = devices.Where(d => d.StatusId == filterViewModel.StatusId);
+            }
+
+            if (filterViewModel.InstallationDate != null)
+            {
+                devices = devices.Where(d => d.InstallationDate.Value.Date == filterViewModel.InstallationDate.Value.Date);
+            }
+
+            return devices;
         }
 
     }
